@@ -1,5 +1,7 @@
 const express = require('express')
+require("express-async-errors")
 const morgan = require('morgan')
+const { errorHandler } = require('./middleware/error')
 require('./db')
 const userRouter = require('./routes/user')
 require('dotenv').config();
@@ -9,6 +11,7 @@ const app = express()
 app.use(express.json())
 app.use(morgan("dev"))
 app.use('/api/user', userRouter)
+app.use(errorHandler)
 
 // app.post(
 //     "/sign-in",

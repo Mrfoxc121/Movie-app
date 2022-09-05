@@ -210,6 +210,7 @@ exports.resetPassword = async (req, res) => {
 
 exports.signIn = async (req, res,) => {
   const { email, password } = req.body;
+  
 
   const user = await User.findOne({ email });
   if (!user) return sendError(res, "Email/Password mismatch!");
@@ -224,4 +225,5 @@ exports.signIn = async (req, res,) => {
   res.json({
     user: { id: _id, name, email, token: jwtToken, },
   });
+  next(error.message)
 };
