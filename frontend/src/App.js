@@ -6,6 +6,7 @@ import Signin from "./components/auth/Signin";
 import Signup from "./components/auth/Signup";
 import Home from "./components/Home";
 import Navbar from "./components/user/Navbar";
+import NotFound from "./components/user/NotFound";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/auth/verification" element={<EmailVerification />} />
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
         <Route path="/auth/confirm-password" element={<ConformPassword />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

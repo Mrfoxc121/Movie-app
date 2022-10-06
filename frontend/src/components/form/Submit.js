@@ -6,7 +6,7 @@ export default function Submit({ value }) {
       <input
         type="submit"
         value={value}
-        className="px-8 py-1 w-full bg-white text-lg hover:bg-opacity-70 rounded transition font-semibold"
+        className="px-8 py-1 w-full dark:bg-white bg-secondary dark:text-secondary text-white text-lg hover:bg-opacity-70 rounded transition font-semibold"
       />
     </div>
   );

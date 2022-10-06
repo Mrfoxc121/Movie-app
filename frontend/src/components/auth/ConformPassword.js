@@ -1,13 +1,15 @@
+import { commonModalClasses } from "../../utils/theme";
 import Container from "../Container";
+import FormContainer from "../form/FormContainer";
 import FormInput from "../form/FormInput";
 import Submit from "../form/Submit";
 import Title from "../form/Title";
 
 export default function ConformPassword() {
   return (
-    <div className="fixed inset-0 bg-primary -z-10 flex justify-center items-center">
+    <FormContainer>
       <Container>
-        <form className="bg-secondary rounded p-8 w-96 space-y-8" action="">
+        <form className={commonModalClasses + " w-96"} action="">
           <Title>Enter New Password</Title>
           <FormInput
             label="New Password"
@@ -24,6 +26,6 @@ export default function ConformPassword() {
           <Submit value="Confirm Password" />
         </form>
       </Container>
-    </div>
+    </FormContainer>
   );
 }

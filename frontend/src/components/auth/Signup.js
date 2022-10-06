@@ -1,27 +1,100 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { createUser } from "../../api/auth";
+import { commonModalClasses } from "../../utils/theme";
 import Container from "../Container";
 import CustomLink from "../CustomLink";
+import FormContainer from "../form/FormContainer";
 import FormInput from "../form/FormInput";
 import Submit from "../form/Submit";
 import Title from "../form/Title";
 
-export default function Signup(to) {
+const validateUserInfo = ({ name, email, password }) => {
+  const isValidEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const isValidName = /^[a-z A-Z]+$/;
+
+  if (!name.trim()) return { ok: false, error: "Name is missing" };
+  if (!isValidName.test(name)) return { ok: false, error: "Invalid name" };
+
+  if (!email.trim()) return { ok: false, error: "Email is missing!" };
+  if (!isValidEmail.test(email)) return { ok: false, error: "Invalid email!" };
+
+  if (!password.trim()) return { ok: false, error: "Password is missing" };
+  if (password.length < 8)
+    return { ok: false, error: "Password must be at least eight characters " };
+  return { ok: true };
+};
+
+export default function Signup() {
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  const handleChange = ({ target }) => {
+    const { value, name } = target;
+    setUserInfo({ ...userInfo, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { ok, error } = validateUserInfo(userInfo);
+
+    if (!ok) return console.log(error);
+
+    const response = await createUser(userInfo);
+    if (response.error) {
+      return console.log(response.error);
+    }
+    navigate("/auth/verification", {
+      state: { user: response.user },
+      repalce: true,
+    });
+  };
+
+  const { name, email, password } = userInfo;
+
   return (
-    <div className="fixed inset-0 bg-primary -z-10 flex justify-center items-center">
+    <FormContainer>
       <Container>
-        <form className="bg-secondary rounded p-8 w-72 space-y-8" action="">
+        <form
+          onSubmit={handleSubmit}
+          className={commonModalClasses + " w-72"}
+          action=""
+        >
           <Title>Sign up</Title>
-          <FormInput label="Name" name="name" placeholder="John Doe" />
-          <FormInput label="Email" name="email" placeholder="john@email.com" />
-          <FormInput label="Password" name="password" placeholder="********" />
+          <FormInput
+            onChange={handleChange}
+            value={name}
+            label="Name"
+            name="name"
+            placeholder="John Doe"
+          />
+          <FormInput
+            onChange={handleChange}
+            value={email}
+            label="Email"
+            name="email"
+            placeholder="john@email.com"
+          />
+          <FormInput
+            onChange={handleChange}
+            value={password}
+            type="password"
+            label="Password"
+            name="password"
+            placeholder="********"
+          />
           <Submit value={"Sign up"} />
           <div className="flex justify-between text-sm">
-            <CustomLink to='/auth/forgot-password'>Forgot Password</CustomLink>
-            <CustomLink to='/auth/sign-in'>Sign in</CustomLink>
-            
+            <CustomLink to="/auth/forgot-password">Forgot Password</CustomLink>
+            <CustomLink to="/auth/sign-in">Sign in</CustomLink>
           </div>
         </form>
       </Container>
-    </div>
+    </FormContainer>
   );
 }
